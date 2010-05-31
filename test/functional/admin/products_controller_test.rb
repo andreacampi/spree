@@ -162,4 +162,16 @@ class Admin::ProductsControllerTest < ActionController::TestCase
       assert_equal @tax_category, assigns(:product).tax_category
     end
   end
+  
+  context "on GET to :edit" do
+    setup do
+      UserSession.create(Factory(:admin_user))
+      product = Factory.create(:product, :price => 49.95)
+      get :edit, :id => product.permalink
+    end
+    should_respond_with :success
+    should "format the price properly" do
+      assert_select "#product_price[value='49.95']"
+    end
+  end
 end
